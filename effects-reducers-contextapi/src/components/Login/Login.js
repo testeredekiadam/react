@@ -97,13 +97,8 @@ const Login = (props) => {
     event.preventDefault();
     if(formIsValid){
       authCtx.onLogin(emailState.value, passwordState.value);
-<<<<<<< HEAD
     } else if(!emailIsValid) {
       
-=======
-    } else if (!emailIsValid) {
-
->>>>>>> d28c191f5d4bae1bba3d39e839304482aad6a658
     }
   };
 
