@@ -13,47 +13,41 @@ const SimpleInput = (props) => {
         reset: resetNameInput
     } = useInput(value => value.trim() !== '');
 
-    const [enteredEmail, setEnteredEmail] = useState("");
-    const [enteredEmailIsTouched, setEnteredEmailIsTouched] = useState(false);
+    const {
+        value: enteredEmail,
+        isValid: enteredEmailIsValid,
+        hasError: emailInputHasError,
+        valueChangeHandler: emailChangeHandler,
+        inputBlurHandler: emailBlurHandler,
+        reset: resetEmailInput
+    } = useInput(value => value.includes('@'));
 
-    const emailValid = enteredEmail.includes('@');
-    const emailInputIsInvalid = !emailValid &&
-        enteredEmailIsTouched;
 
     let formIsValid = false;
 
-    if (enteredNameIsValid &&
-        emailValid) {
-        formIsValid = true;
-    }
+    if (enteredNameIsValid && enteredEmailIsValid)
+        {
+            formIsValid = true;
+        }
 
-    const emailInputChangeHandler = event => {
-        setEnteredEmail(event.target.value);
-    };
-
-
-    const emailInputBlurHandler = event => {
-        setEnteredEmailIsTouched(true);
-    };
 
     const formSubmissionHandler = event => {
         event.preventDefault();
 
-        if (!enteredNameIsValid) {
-            return;
-        }
+        if (!enteredNameIsValid)
+            {
+                return;
+            }
 
         console.log(enteredName);
 
         resetNameInput();
-
-        setEnteredEmail('');
-        setEnteredEmailIsTouched(false);
+        resetEmailInput();
     };
 
 
     const nameInputClasses = nameInputHasError ? 'form-control invalid' : 'form-control';
-    const emailInputClasses = emailInputIsInvalid ? 'form-control invalid' : 'form-control';
+    const emailInputClasses = emailInputHasError ? 'form-control invalid' : 'form-control';
 
     return (<form onSubmit={formSubmissionHandler}>
 
@@ -65,8 +59,7 @@ const SimpleInput = (props) => {
                     onChange={nameChangeHandler}
                     value={enteredName}
                     onBlur={nameBlurHandler}/>
-                {nameInputHasError &&
-                    <p className="error-text">Name must not be empty!</p>}
+                {nameInputHasError && <p className="error-text">Name must not be empty!</p>}
             </div>
 
             <div className={emailInputClasses}>
@@ -74,11 +67,10 @@ const SimpleInput = (props) => {
                 <input
                     type='email'
                     id='email'
-                    onChange={emailInputChangeHandler}
+                    onChange={emailChangeHandler}
                     value={enteredEmail}
-                    onBlur={emailInputBlurHandler}/>
-                {emailInputIsInvalid &&
-                    <p className="error-text">Enter a valid E-Mail!</p>}
+                    onBlur={emailBlurHandler}/>
+                {emailInputHasError && <p className="error-text">Enter a valid E-Mail!</p>}
             </div>
 
             <div className="form-actions">
